@@ -29,17 +29,7 @@ const blogListSchema = new schema.Array(blogSchema);
 
 @Injectable()
 export class BlogEffects {
-
-  // loadBlogs$ = createEffect(() => this.actions$.pipe(
-  //   ofType(BlogActions.loadBlogs),
-  //   mergeMap(() => this.blogService.getAll()
-  //     .pipe(
-  //       map(blogs => (BlogActions.loadBlogsSuccess({ blogs }))),
-  //       catchError(() => BlogActions.loadBlogsFailure)
-  //     ))
-  // ));
-
-  loadBlogs2$ = createEffect(() => this.actions$.pipe(
+  loadBlogs$ = createEffect(() => this.actions$.pipe(
     ofType(BlogActions.loadBlogs),
     mergeMap(() => this.blogService.getAll()
       .pipe(
@@ -48,34 +38,24 @@ export class BlogEffects {
       ))
   ));
 
-  loadBlogsUsersComments$ = createEffect(() => this.actions$.pipe(
+  decomposeBlogs$ = createEffect(() => this.actions$.pipe(
     ofType(BlogActions.decomposeBlogs),
     flatMap(action => [
       /// split this action into 3 other actions
-      BlogActions.addBlogs({ blogs: this.getBlogs(action.data) }),
-      UserActions.addUsers({ users: this.getUsers(action.data) }),
-      CommentActions.addComments({ comments: this.getComments(action.data) })
+      BlogActions.addBlogs({ blogs: action.data.blogs }),
+      UserActions.addUsers({ users: action.data.users }),
+      CommentActions.addComments({ comments: action.data.comments })
     ])
   ));
 
   splitModels(data): BlogsUsersComments {
-    return normalize(data, blogListSchema);
-  }
+    const dictionary = normalize(data, blogListSchema);
 
-  dictionarytoArray(data) {
-    return Object.values(data);
-  }
-
-  getBlogs(data): Blog[] {
-    return this.dictionarytoArray(data.entities.blogs) as Blog[];
-  }
-
-  getUsers(data): User[] {
-    return this.dictionarytoArray(data.entities.users) as User[];
-  }
-
-  getComments(data): Comment[] {
-    return this.dictionarytoArray(data.entities.comments) as Comment[];
+    return {
+      blogs: Object.values(dictionary.entities.blogs) as Blog[],
+      users: Object.values(dictionary.entities.users) as User[],
+      comments: Object.values(dictionary.entities.comments) as Comment[],
+    }
   }
 
   constructor(private actions$: Actions,

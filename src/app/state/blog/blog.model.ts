@@ -9,17 +9,9 @@ export interface Blog {
 }
 
 export interface BlogsUsersComments {
-  entities: {
-    blogs: {
-
-    },
-    users: {
-
-    },
-    comments: {
-
-    }
-  }
+  blogs: Blog[],
+  users: User[],
+  comments: Comment[]
 }
 
 export interface BlogView {
