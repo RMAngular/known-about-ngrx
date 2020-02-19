@@ -22,14 +22,14 @@ export interface BlogsUsersComments {
   }
 }
 
-export interface BlogFull {
+export interface BlogView {
   id: string;
   title: string;
   author: User;
-  comments: [CommentFull]
+  comments: CommentView[]
 }
 
-export interface CommentFull {
+export interface CommentView {
   id: string;
   commentor: User
 }

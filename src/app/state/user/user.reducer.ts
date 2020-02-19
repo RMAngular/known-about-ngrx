@@ -2,20 +2,21 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { User } from './user.model';
 import * as UserActions from './user.actions';
+import { AppState } from '../reducers';
 
 export const usersFeatureKey = 'users';
 
-export interface State extends EntityState<User> {
+export interface UserState extends EntityState<User> {
   // additional entities state properties
 }
 
 export const adapter: EntityAdapter<User> = createEntityAdapter<User>();
 
-export const initialState: State = adapter.getInitialState({
+export const initialState: UserState = adapter.getInitialState({
   // additional entity state properties
 });
 
-const userReducer = createReducer(
+const reduce = createReducer(
   initialState,
   on(UserActions.addUser,
     (state, action) => adapter.addOne(action.user, state)
@@ -49,13 +50,11 @@ const userReducer = createReducer(
   ),
 );
 
-export function reducer(state: State | undefined, action: Action) {
-  return userReducer(state, action);
+export function userReducer(state: UserState | undefined, action: Action) {
+  return reduce(state, action);
 }
 
 export const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal,
-} = adapter.getSelectors();
+  selectEntities: userEntities,
+  selectAll: allUsers,
+} = adapter.getSelectors((state: AppState) => state.user);

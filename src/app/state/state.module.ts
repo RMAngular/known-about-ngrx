@@ -1,9 +1,12 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StoreModule } from '@ngrx/store';
-import * as fromBlog from './reducers';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../../environments/environment';
+
 import { BlogEffects } from './blog/blog.effects';
+import { reducers, metaReducers } from './reducers';
 
 
 
@@ -11,8 +14,15 @@ import { BlogEffects } from './blog/blog.effects';
   declarations: [],
   imports: [
     CommonModule,
-    StoreModule.forFeature('appState', fromBlog.reducers, { metaReducers: fromBlog.metaReducers }),
-    EffectsModule.forFeature([BlogEffects])
+    StoreModule.forRoot(reducers, {
+      metaReducers,
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true
+      }
+    }),
+    EffectsModule.forRoot([BlogEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ]
 })
 export class StateModule {

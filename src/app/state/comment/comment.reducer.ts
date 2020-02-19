@@ -2,20 +2,21 @@ import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Comment } from './comment.model';
 import * as CommentActions from './comment.actions';
+import { AppState } from '../reducers';
 
 export const commentsFeatureKey = 'comments';
 
-export interface State extends EntityState<Comment> {
+export interface CommentState extends EntityState<Comment> {
   // additional entities state properties
 }
 
 export const adapter: EntityAdapter<Comment> = createEntityAdapter<Comment>();
 
-export const initialState: State = adapter.getInitialState({
+export const initialState: CommentState = adapter.getInitialState({
   // additional entity state properties
 });
 
-const commentReducer = createReducer(
+const reduce = createReducer(
   initialState,
   on(CommentActions.addComment,
     (state, action) => adapter.addOne(action.comment, state)
@@ -49,13 +50,11 @@ const commentReducer = createReducer(
   ),
 );
 
-export function reducer(state: State | undefined, action: Action) {
-  return commentReducer(state, action);
+export function commentReducer(state: CommentState | undefined, action: Action) {
+  return reduce(state, action);
 }
 
 export const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal,
-} = adapter.getSelectors();
+  selectEntities: commentEntities,
+  selectAll: allComments,
+} = adapter.getSelectors((state: AppState) => state.comment);

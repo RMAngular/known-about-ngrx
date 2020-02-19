@@ -43,13 +43,13 @@ export class BlogEffects {
     ofType(BlogActions.loadBlogs),
     mergeMap(() => this.blogService.getAll()
       .pipe(
-        map(blogs => (BlogActions.loadBlogsUsersComments({ data: this.splitModels(blogs) }))),
+        map(blogs => (BlogActions.decomposeBlogs({ data: this.splitModels(blogs) }))),
         catchError(() => BlogActions.loadBlogsFailure)
       ))
   ));
 
   loadBlogsUsersComments$ = createEffect(() => this.actions$.pipe(
-    ofType(BlogActions.loadBlogsUsersComments),
+    ofType(BlogActions.decomposeBlogs),
     flatMap(action => [
       /// split this action into 3 other actions
       BlogActions.addBlogs({ blogs: this.getBlogs(action.data) }),

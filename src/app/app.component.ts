@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { selectCompleteBlog } from './state/blog';
-import { BlogFull, Blog } from './state/blog/blog.model';
 import { loadBlogs } from './state/blog/blog.actions';
-import * as fromBlogs from 'src/app/state/blog/blog.reducer';
+import { AppState } from './state/reducers';
+import { allBlogs } from './state/blog/blog.reducer';
+import { Blog, BlogView } from './state/blog/blog.model';
+import { blogView } from './state/blog';
 
 @Component({
   selector: 'app-root',
@@ -14,13 +15,13 @@ import * as fromBlogs from 'src/app/state/blog/blog.reducer';
 })
 export class AppComponent implements OnInit {
   title = 'known-about-ngrx';
-  blogs$: Observable<Blog[]>;
+  blogs$: Observable<BlogView[]>;
 
-  constructor(private store: Store<{ count: number }>) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
     this.store.dispatch(loadBlogs());
-    this.blogs$ = this.store.pipe(select(fromBlogs.selectEntities));
+    this.blogs$ = this.store.select(blogView);
   }
 }

@@ -1,21 +1,20 @@
-import { BlogFull } from './blog.model';
+import { BlogView } from './blog.model';
 import { createSelector } from '@ngrx/store';
+import { allBlogs } from './blog.reducer';
+import { userEntities } from '../user/user.reducer';
+import { commentEntities } from '../comment/comment.reducer';
 
-import * as fromBlogs from './blog.reducer';
-import * as fromUsers from '../user/user.reducer';
-import * as fromComments from '../comment/comment.reducer';
 
-
-export const selectCompleteBlog = createSelector(
-  fromBlogs.selectAll,
-  fromUsers.selectEntities,
-  fromComments.selectEntities,
-  (blogs, users, comments) => {
-    return blogs;
-    // return blogs.map(blog => {
-    //   return {
-    //     ...blog, author: users[blog.author], comments: []
-    //   }
-    // })
-  }
-);
+export const blogView = createSelector(
+  allBlogs,
+  userEntities,
+  commentEntities,
+  (blogs, users, comments) =>
+    blogs.map(blog => ({
+      ...blog,
+      author: users[blog.author],
+      comments: blog.comments.map(commentId => comments[commentId]).map(comment => ({
+        id: comment.id,
+        commentor: users[comment.commenter]
+      }))
+    })));

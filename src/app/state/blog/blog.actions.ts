@@ -7,7 +7,7 @@ export const loadBlogs = createAction(
   '[Blog/API] Load Blogs'
 );
 
-export const loadBlogsUsersComments = createAction(
+export const decomposeBlogs = createAction(
   '[Blogs/API] Load Blogs Users Comments',
   props<{ data: BlogsUsersComments }>()
 );

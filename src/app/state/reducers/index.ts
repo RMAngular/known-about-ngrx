@@ -6,21 +6,23 @@ import {
   MetaReducer
 } from '@ngrx/store';
 import { environment } from '../../../environments/environment';
-import { reducer as blogReducer } from '../blog/blog.reducer';
-import { reducer as userReducer } from '../user/user.reducer';
-import { reducer as commentReducer } from '../comment/comment.reducer';
+import { blogReducer, BlogState } from '../blog/blog.reducer';
+import { userReducer, UserState } from '../user/user.reducer';
+import { commentReducer, CommentState } from '../comment/comment.reducer';
 
 export const blogFeatureKey = 'blog';
 
-export interface State {
-
+export interface AppState {
+  blog: BlogState;
+  user: UserState;
+  comment: CommentState;
 }
 
-export const reducers: ActionReducerMap<State> = {
+export const reducers: ActionReducerMap<AppState> = {
   blog: blogReducer,
   user: userReducer,
   comment: commentReducer
 };
 
 
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
+export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];

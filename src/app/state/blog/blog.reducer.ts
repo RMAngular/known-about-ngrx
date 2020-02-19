@@ -1,3 +1,4 @@
+import { AppState } from './../reducers/index';
 import { Action, createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Blog } from './blog.model';
@@ -6,17 +7,17 @@ import { createSelector } from '@ngrx/store';
 
 export const blogsFeatureKey = 'blogs';
 
-export interface State extends EntityState<Blog> {
+export interface BlogState extends EntityState<Blog> {
   // additional entities state properties
 }
 
 export const adapter: EntityAdapter<Blog> = createEntityAdapter<Blog>();
 
-export const initialState: State = adapter.getInitialState({
+export const initialState: BlogState = adapter.getInitialState({
   // additional entity state properties
 });
 
-const blogReducer = createReducer(
+const reduce = createReducer(
   initialState,
   on(BlogActions.addBlog,
     (state, action) => adapter.addOne(action.blog, state)
@@ -50,13 +51,12 @@ const blogReducer = createReducer(
   ),
 );
 
-export function reducer(state: State | undefined, action: Action) {
-  return blogReducer(state, action);
+export function blogReducer(state: BlogState | undefined, action: Action) {
+  return reduce(state, action);
 }
 
 export const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal,
-} = adapter.getSelectors();
+  selectEntities: blogEntities,
+  selectAll: allBlogs,
+} = adapter.getSelectors((state: AppState) => state.blog);
+
