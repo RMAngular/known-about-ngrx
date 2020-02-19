@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "known-about-ngrx": {
@@ -119,6 +119,11 @@
           }
         }
       }
-    }},
-  "defaultProject": "known-about-ngrx"
+    }
+  },
+  "defaultProject": "known-about-ngrx",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics",
+    "analytics": false
+  }
 }
