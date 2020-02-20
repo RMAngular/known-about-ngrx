@@ -23,5 +23,5 @@ export interface BlogView {
 
 export interface CommentView {
   id: string;
-  commentor: User
+  commenter: User
 }

@@ -1,1 +1,10 @@
-<span>{{blogs$ | async | json}}</span>
+<mat-drawer-container (backdropClick)="sidenav.close()" fullscreen>
+  <mat-drawer #sidenav (keydown.escape)="sidenav.close()" disableClose>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-toolbar color="primary">
+      <span>NgRx Blogs</span>
+    </mat-toolbar>
+    <app-blogs-list></app-blogs-list>
+  </mat-drawer-content>
+</mat-drawer-container>

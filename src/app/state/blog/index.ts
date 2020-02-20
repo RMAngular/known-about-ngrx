@@ -15,6 +15,6 @@ export const blogView = createSelector(
       author: users[blog.author],
       comments: blog.comments.map(commentId => comments[commentId]).map(comment => ({
         id: comment.id,
-        commentor: users[comment.commenter]
+        commenter: users[comment.commenter]
       }))
     })));

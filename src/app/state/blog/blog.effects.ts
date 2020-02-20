@@ -49,8 +49,10 @@ export class BlogEffects {
   ));
 
   splitModels(data): BlogsUsersComments {
+    // use normalizr to separate the data
     const dictionary = normalize(data, blogListSchema);
 
+    // create a new structure to hold the arrays of data
     return {
       blogs: Object.values(dictionary.entities.blogs) as Blog[],
       users: Object.values(dictionary.entities.users) as User[],
